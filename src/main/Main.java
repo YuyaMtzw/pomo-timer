@@ -3,10 +3,11 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,6 +26,7 @@ public class Main extends JFrame implements ActionListener {
 	JPanel timePanel;
 	JLabel time;
 	JLabel pomo;
+	JLabel status;
 	JButton startBtn;
 	JButton pauseBtn;
 	JButton stopBtn;
@@ -52,7 +54,7 @@ public class Main extends JFrame implements ActionListener {
 
 	Main(String title) {
 		setTitle(title);
-		setBounds(100, 100, 350, 200);
+		setBounds(100, 100, 250, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		underPanel = new JPanel();
@@ -62,22 +64,27 @@ public class Main extends JFrame implements ActionListener {
 		timePanel = new JPanel();
 		time = new JLabel("00:00");
 		pomo = new JLabel("0 pomo");
+		status = new JLabel("stop");
 		timer = new Timer(1000, this);
 
+		status.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		time.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 80));
+		pomo.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		underPanel.add(startBtn);
 		underPanel.add(pauseBtn);
 		underPanel.add(stopBtn);
-		underPanel.setBackground(new Color(25, 68, 142));
+		underPanel.setBackground(Color.WHITE);
 		timePanel.setBackground(Color.WHITE);
-		timePanel.add(time);
 		timePanel.add(pomo);
-		timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.Y_AXIS));
+		timePanel.add(time);
+		timePanel.add(status);
+		timePanel.setLayout(new FlowLayout());
 
 		startBtn.addActionListener(this);
 		pauseBtn.addActionListener(this);
 		stopBtn.addActionListener(this);
-		MaterialUIMovement.add(startBtn, MaterialColors.BLUE_300);
-		MaterialUIMovement.add(pauseBtn, MaterialColors.YELLOW_300);
+		MaterialUIMovement.add(startBtn, MaterialColors.GREEN_300);
+		MaterialUIMovement.add(pauseBtn, MaterialColors.RED_300);
 		MaterialUIMovement.add(stopBtn, MaterialColors.RED_300);
 
 		Container contentPane = getContentPane();
@@ -100,18 +107,22 @@ public class Main extends JFrame implements ActionListener {
 			minCnt = 0;
 			intervalCnt = 0;
 			intervalCheck = false;
-			timer.stop();
+			isRun = false;
+			status.setText("Stop");
 			time.setText("00:00");
 			timePanel.setBackground(Color.WHITE);
+			timer.stop();
 		} else if (e.getSource() == startBtn) {
 			if (isRun == false) {
 				time.setText("00:00");
 				timePanel.setBackground(new Color(236, 104, 0));
 			}
+			status.setText("Started");
 			timer.start();
 		} else if (e.getSource() == pauseBtn) {
 			timer.stop();
 			isRun = true;
+			status.setText("Pause");
 		} else {
 			sec++;
 
